@@ -1,68 +1,29 @@
 const express = require('express');
-const {MongoClient} = require('mongodb');
-const debug = require('debug')('app:listRoutes');
-
-const adminRoute = express.Router();
-
-const list ={
-    {
-        employee name: 'Mr. James Asamoah',
-
-    },
-    {
-        employee name: 'Mr.Raymond Ansah',
-    },
-    {
-        employee name: 'Mrs. Rebecca Aframa',
-    },
-    {
-        employee name: 'Mrs. Helena Amoah',
-    },
+const router = express.Router();
+const { MongoClient } = require('mongodb');
 
 
+const todo = require('./todolist.json');
+const employee = require('./employeelist.js');
+ onst url = 'mongodb://localhost:27017';
+ let dbName = 'employeedb';
+ const client =new MongoClient(url, {useUnifiedTopology:});
+  
+ let employeedb;
+ let todoCollection;
 
+ (async () => {
+     await client.connect();
+     employeedb = client.db('employeedb');
+     todoCollection = dbname.collection('todo');
 
+ })();
 
+ router.get('/', async (req, res)=>{
+     const todolist = await todoCollection.find({}).toArray();
+     res.render('admin', {
+         todolist,
+         employees
+     })
+ });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-};
-function router(nav){
-    adminRoute.route('/')
-    .get((req, res) =>{
-        const url= 'mongodb://localhost:27017';
-        const dbName= 'employee db';
-        (async function mongo() {
-            let client;
-            try{
-                client= await MongoClient.connect(url);
-                debug('connected successfully');
-                const db= client.db(dbName);
-                const response = await db.collection('todo').insertMany(list);
-                res.json(response);
-             } catch (err) {
-               debug(err. stack);
-             }
-             client.close();
-            }());
-        });
-        return adminRoute;
-}
-
-module.exports= router;
